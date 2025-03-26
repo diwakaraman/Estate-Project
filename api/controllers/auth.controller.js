@@ -3,7 +3,7 @@ import bcryptjs from 'bcryptjs';
 
 
 
-export const signup= async (req, res) => {
+export const signup= async (req, res,next) => {
 const { username, email, password } = req.body;
 const hashedPassword =  bcryptjs.hashSync(password, 12);
 const newUser = new User({
@@ -15,7 +15,7 @@ const newUser = new User({
     await newUser.save();
     res.status(201).json('user created successfully');  
   } catch (error) {
-    res.status(500).json(error.message);
+ next(error);
   }
 
 };
