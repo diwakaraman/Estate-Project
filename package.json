@@ -24,7 +24,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.13.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "vite": "^6.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.13.13"
