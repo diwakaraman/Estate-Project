@@ -50,7 +50,7 @@ export default function About() {
         <h2 className="text-2xl font-semibold text-slate-800 mb-6 text-center">Meet Our Expert Team</h2>
         <div className="flex flex-wrap justify-center gap-6">
           {[
-            { name: "AMAN", role: "Lead Agent", img: "https://randomuser.me/api/portraits/men/32.jpg" },
+            { name: "AMAN", role: "Lead Agent", img: "p1.jpeg" },
             { name: "RIYA", role: "Client Manager", img: "https://randomuser.me/api/portraits/women/44.jpg" },
             { name: "Rahul Verma", role: "Market Analyst", img: "https://randomuser.me/api/portraits/men/47.jpg" },
           ].map((member, idx) => (

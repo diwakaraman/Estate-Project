@@ -1,12 +1,12 @@
-import {useEffect, useState} from 'react'
-import { Link } from "react-router-dom";
-
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ListingItem from '../components/ListingItem';
+import { FaTags, FaHome, FaMoneyBillWave, FaBullhorn } from 'react-icons/fa';
 
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
-  console.log(saleListings);
 
   useEffect(() => {
     const fetchOfferListings = async () => {
@@ -19,6 +19,7 @@ export default function Home() {
         console.log(error);
       }
     };
+
     const fetchRentListings = async () => {
       try {
         const res = await fetch('/api/listing/get?type=rent&limit=4');
@@ -34,107 +35,106 @@ export default function Home() {
       try {
         const res = await fetch('/api/listing/get?type=sale&limit=4');
         const data = await res.json();
-        
         setSaleListings(data);
       } catch (error) {
-        log(error);
+        console.log(error);
       }
     };
+
     fetchOfferListings();
   }, []);
-  
 
-  
-
-  
   return (
-   
-        <div>
-        {/* top */}
-        <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
-          <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-            Find your next <span className='text-slate-500'>perfect</span>
-            <br />
-            place with ease
-          </h1>
-          <div className='text-gray-400 text-xs sm:text-sm'>
-            Sahand Estate is the best place to find your next perfect place to
-            live.
-            <br />
-            We have a wide range of properties for you to choose from.
-          </div>
-          <Link
-            to={'/search'}
-            className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
-          >
-            Let's get started...
-          </Link>
-        </div>
-      
-        {/* swiper */}
-        {/* <Swiper navigation>
-        {offerListings &&
-          offerListings.length > 0 &&
-          offerListings.map((listing) => (
-            <SwiperSlide>
-              <div
-                style={{
-                  background: `url(${listing.imageUrls[0]}) center no-repeat`,
-                  backgroundSize: 'cover',
-                }}
-                className='h-[500px]'
-                key={listing._id}
-              ></div>
-            </SwiperSlide>
-          ))}
-      </Swiper> */}
-      
-      {
-        /* listing result for offer ,sale and rent*/
-      }
+    <div>
+      {/* Top Hero Section */}
+      <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto text-center'>
+        <h1 className='text-slate-700 font-bold text-4xl lg:text-6xl flex flex-col items-center'>
+          <FaHome className='text-slate-500 mb-2' size={40} />
+          Find your next <span className='text-slate-500'>perfect</span> place
+        </h1>
+        <p className='text-gray-500 text-sm sm:text-base'>
+          RealEstate is your trusted place to find ideal homes to live and invest in.<br />
+          Browse premium listings tailored to your preferences.
+        </p>
+        <Link
+          to='/search'
+          className='text-blue-700 font-semibold hover:underline text-sm'
+        >
+          Let’s get started →
+        </Link>
+      </div>
 
-{/* <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
-        {offerListings && offerListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent offers</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?offer=true'}>Show more offers</Link>
+      {/* Listings Section */}
+      <div className='max-w-6xl mx-auto p-3 flex flex-col gap-12 my-10'>
+        {/* Offers */}
+        {offerListings.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between mb-4'>
+              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
+                <FaTags className='text-green-500' />
+                Recent Offers
+              </h2>
+              <Link
+                to='/search?offer=true'
+                className='text-sm text-blue-700 hover:underline'
+              >
+                Show more offers
+              </Link>
             </div>
-            <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-wrap gap-6'>
               {offerListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <ListingItem key={listing._id} listing={listing} />
               ))}
             </div>
           </div>
         )}
-        {rentListings && rentListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for rent</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=rent'}>Show more places for rent</Link>
+
+        {/* Rent */}
+        {rentListings.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between mb-4'>
+              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
+                <FaBullhorn className='text-indigo-500' />
+                Places for Rent
+              </h2>
+              <Link
+                to='/search?type=rent'
+                className='text-sm text-blue-700 hover:underline'
+              >
+                Show more rentals
+              </Link>
             </div>
-            <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-wrap gap-6'>
               {rentListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <ListingItem key={listing._id} listing={listing} />
               ))}
             </div>
           </div>
         )}
-        {saleListings && saleListings.length > 0 && (
-          <div className=''>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Recent places for sale</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?type=sale'}>Show more places for sale</Link>
+
+        {/* Sale */}
+        {saleListings.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between mb-4'>
+              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
+                <FaMoneyBillWave className='text-yellow-500' />
+                Properties for Sale
+              </h2>
+              <Link
+                to='/search?type=sale'
+                className='text-sm text-blue-700 hover:underline'
+              >
+                Show more sales
+              </Link>
             </div>
-            <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-wrap gap-6'>
               {saleListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <ListingItem key={listing._id} listing={listing} />
               ))}
             </div>
           </div>
         )}
-      </div> */}
-      
+      </div>
     </div>
   );
 }
