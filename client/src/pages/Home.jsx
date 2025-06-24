@@ -11,12 +11,12 @@ export default function Home() {
   return (
     <div>
       {/* Top Hero Section */}
-      <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto text-center'>
+      <div className='flex flex-col gap-6 p-28 px-3 max-w-7xl mx-auto text-center'>
         {/* Big Home Photo */}
         <img
-          src="/hero-home.jpg" // or use {heroHome} if imported
+          src="/p2.jpg" // or use {heroHome} if imported
           alt="Beautiful Home"
-          className="w-full max-h-[400px] object-cover rounded-lg shadow-lg mb-6"
+          className="w-full max-h-[500px] object-cover rounded-lg shadow-lg mb-6"
         />
         <h1 className='text-slate-700 font-bold text-4xl lg:text-6xl flex flex-col items-center'>
           <FaHome className='text-slate-500 mb-2' size={40} />
