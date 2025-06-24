@@ -2,52 +2,22 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
 import { FaTags, FaHome, FaMoneyBillWave, FaBullhorn } from 'react-icons/fa';
+// If your image is in src/assets
+// import heroHome from '../assets/hero-home.jpg';
 
 export default function Home() {
-  const [offerListings, setOfferListings] = useState([]);
-  const [rentListings, setRentListings] = useState([]);
-  const [saleListings, setSaleListings] = useState([]);
-
-  useEffect(() => {
-    const fetchOfferListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?offer=true&limit=4');
-        const data = await res.json();
-        setOfferListings(data);
-        fetchRentListings();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchRentListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?type=rent&limit=4');
-        const data = await res.json();
-        setRentListings(data);
-        fetchSaleListings();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchSaleListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?type=sale&limit=4');
-        const data = await res.json();
-        setSaleListings(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchOfferListings();
-  }, []);
+  // ...your state and useEffect code (unchanged)
 
   return (
     <div>
       {/* Top Hero Section */}
       <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto text-center'>
+        {/* Big Home Photo */}
+        <img
+          src="/hero-home.jpg" // or use {heroHome} if imported
+          alt="Beautiful Home"
+          className="w-full max-h-[400px] object-cover rounded-lg shadow-lg mb-6"
+        />
         <h1 className='text-slate-700 font-bold text-4xl lg:text-6xl flex flex-col items-center'>
           <FaHome className='text-slate-500 mb-2' size={40} />
           Find your next <span className='text-slate-500'>perfect</span> place
@@ -64,77 +34,7 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* Listings Section */}
-      <div className='max-w-6xl mx-auto p-3 flex flex-col gap-12 my-10'>
-        {/* Offers */}
-        {offerListings.length > 0 && (
-          <div>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
-                <FaTags className='text-green-500' />
-                Recent Offers
-              </h2>
-              <Link
-                to='/search?offer=true'
-                className='text-sm text-blue-700 hover:underline'
-              >
-                Show more offers
-              </Link>
-            </div>
-            <div className='flex flex-wrap gap-6'>
-              {offerListings.map((listing) => (
-                <ListingItem key={listing._id} listing={listing} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Rent */}
-        {rentListings.length > 0 && (
-          <div>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
-                <FaBullhorn className='text-indigo-500' />
-                Places for Rent
-              </h2>
-              <Link
-                to='/search?type=rent'
-                className='text-sm text-blue-700 hover:underline'
-              >
-                Show more rentals
-              </Link>
-            </div>
-            <div className='flex flex-wrap gap-6'>
-              {rentListings.map((listing) => (
-                <ListingItem key={listing._id} listing={listing} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Sale */}
-        {saleListings.length > 0 && (
-          <div>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-2xl font-semibold text-slate-700 flex items-center gap-2'>
-                <FaMoneyBillWave className='text-yellow-500' />
-                Properties for Sale
-              </h2>
-              <Link
-                to='/search?type=sale'
-                className='text-sm text-blue-700 hover:underline'
-              >
-                Show more sales
-              </Link>
-            </div>
-            <div className='flex flex-wrap gap-6'>
-              {saleListings.map((listing) => (
-                <ListingItem key={listing._id} listing={listing} />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      {/* ...rest of your code */}
     </div>
   );
 }
