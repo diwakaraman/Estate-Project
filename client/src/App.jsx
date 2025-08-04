@@ -9,6 +9,9 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Search from './pages/Search';
 import ListingItem from "./components/ListingItem";
+import Description from './pages/Description';
+
+import React from 'react';    
 
 function App() {
   return (
