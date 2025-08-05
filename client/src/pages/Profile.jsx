@@ -1,150 +1,141 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/pages/Profile.jsx
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  signOut,
+} from "../redux/user/userSlice";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../firebase";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
-  const navigate = useNavigate();
+  const { currentUser, loading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    photo: '',
-  });
-  const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const fileRef = useRef();
+  const [file, setFile] = useState(undefined);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  // Simulate user fetch
-  useEffect(() => {
-    // Replace this with real API
-    setFormData({
-      
-      photo: 'p1.jpeg',
-    });
-  }, []);
+  const handleFileUpload = () => {
+    if (!file) return;
+
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      null,
+      (error) => {
+        console.log(error);
+        setFileUploadError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, avatar: downloadURL });
+        });
+      }
+    );
+  };
 
   const handleChange = (e) => {
-    const { id, value, files } = e.target;
-    if (id === 'photo' && files.length > 0) {
-      setPreview(URL.createObjectURL(files[0]));
-      setFormData((prev) => ({ ...prev, photo: files[0] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [id]: value }));
-    }
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
+    dispatch(updateUserStart());
     try {
-      // TODO: Upload image + send data to backend
-      console.log('Profile data to update:', formData);
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
 
-      setLoading(false);
-      alert('Profile updated!');
-    } catch (err) {
-      setLoading(false);
-      setError('Failed to update profile.');
+      if (res.ok) {
+        dispatch(updateUserSuccess(data));
+        setUpdateSuccess(true);
+      } else {
+        dispatch(updateUserFailure(data.message));
+      }
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
     }
   };
 
-  const handleSignOut = () => {
-    // TODO: Clear token or session
-    navigate('/signin');
-  };
-
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>My Profile</h1>
-
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        {/* Profile Photo with Styled Upload */}
-        <div className='flex flex-col items-center gap-3'>
-          <img
-            src={preview || formData.photo}
-            alt='Profile'
-            className='w-24 h-24 rounded-full object-cover border'
-          />
-
-          <label
-            htmlFor='photo'
-            className='bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition'
-          >
-            Upload Photo
-          </label>
-          <input
-            type='file'
-            id='photo'
-            accept='image/*'
-            onChange={handleChange}
-            className='hidden'
-          />
-
-          {formData.photo && typeof formData.photo === 'object' && (
-            <p className='text-sm text-slate-600'>
-              Selected: {formData.photo.name}
-            </p>
-          )}
-        </div>
-
-        {/* Username */}
+    <div className="p-4 max-w-lg mx-auto">
+      <h1 className="text-3xl font-semibold text-center my-6">Profile</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
-          type='text'
-          placeholder='Username'
-          id='username'
-          value={formData.username}
-          onChange={handleChange}
-          className='border p-3 rounded-lg'
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          ref={fileRef}
+          accept="image/*"
         />
-
-        {/* Email */}
-        <input
-          type='email'
-          placeholder='Email'
-          id='email'
-          value={formData.email}
-          onChange={handleChange}
-          className='border p-3 rounded-lg'
-        />
-
-        {/* Password */}
-        <input
-          type='password'
-          placeholder='Password'
-          id='password'
-          value={formData.password}
-          onChange={handleChange}
-          className='border p-3 rounded-lg'
-        />
-
-        {/* Submit Button */}
         <button
-          type='submit'
-          disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+          type="button"
+          onClick={handleFileUpload}
+          className="bg-blue-500 text-white p-2 rounded"
         >
-          {loading ? 'Updating...' : 'Update Profile'}
+          Upload Image
         </button>
+
+        {fileUploadError && (
+          <p className="text-red-500 text-sm">Image upload failed!</p>
+        )}
+
+        <input
+          type="text"
+          placeholder="Username"
+          defaultValue={currentUser?.username}
+          id="username"
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          defaultValue={currentUser?.email}
+          id="email"
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          id="password"
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <button
+          disabled={loading}
+          className="bg-green-600 text-white p-2 rounded hover:bg-green-700"
+        >
+          {loading ? "Updating..." : "Update Profile"}
+        </button>
+        {updateSuccess && (
+          <p className="text-green-600 text-sm">Profile updated successfully!</p>
+        )}
       </form>
 
-      {/* Sign Out */}
-      <div className='flex justify-between mt-6 text-sm'>
-        <button
-          onClick={() => navigate('/')}
-          className='text-blue-600 hover:underline'
-        >
-          ← Back to Home
-        </button>
-        <button
-          onClick={handleSignOut}
-          className='text-red-600 hover:underline'
+      <div className="flex justify-between mt-4 text-sm">
+        <Link to="/create-listing" className="text-blue-600 hover:underline">
+          Create Listing
+        </Link>
+        <span
+          className="text-red-500 cursor-pointer"
+          onClick={() => dispatch(signOut())}
         >
           Sign Out
-        </button>
+        </span>
       </div>
-
-      {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   );
 }

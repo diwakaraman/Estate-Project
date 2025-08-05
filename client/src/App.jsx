@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/footer'; 
-
 import Home from './pages/Home';
 import About from './pages/About';
 import Profile from './pages/Profile';
@@ -10,6 +9,8 @@ import SignUp from './pages/SignUp';
 import Search from './pages/Search';
 import ListingItem from "./components/ListingItem";
 import Description from './pages/Description';
+import { updateListing } from '../../api/controllers/listing.controller';
+
 
 import React from 'react';    
 

@@ -1,69 +1,109 @@
-import { FaSearch, FaHome, FaInfoCircle, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import {
+  FaSearch,
+  FaUserCircle,
+  FaSignInAlt,
+  FaUserPlus,
+  FaHome,
+  FaInfoCircle,
+} from 'react-icons/fa';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSearchSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/search?searchTerm=${encodeURIComponent(searchTerm.trim())}`);
-      setSearchTerm('');
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
   };
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
   return (
-    <header className='bg-white shadow-md sticky top-0 z-50'>
-      <div className='flex justify-between items-center max-w-7xl mx-auto px-4 py-3'>
-        {/* Logo */}
+    <header className='bg-slate-200 shadow-md'>
+      <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
-          <h1 className='text-xl sm:text-2xl font-bold flex items-center gap-1'>
-            <span className='text-slate-500'>Real</span>
-            <span className='text-slate-800'>Estate</span>
+          <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
+            <span className='text-slate-500'>Sahand</span>
+            <span className='text-slate-700'>Estate</span>
           </h1>
         </Link>
 
-        {/* Search Bar */}
         <form
-          onSubmit={handleSearchSubmit}
-          className='bg-slate-100 p-2 rounded-lg flex items-center shadow-sm'
+          onSubmit={handleSubmit}
+          className='bg-slate-100 p-3 rounded-lg flex items-center'
         >
           <input
             type='text'
-            placeholder='Search listings...'
+            placeholder='Search...'
+            className='bg-transparent focus:outline-none w-24 sm:w-64'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className='bg-transparent focus:outline-none w-24 sm:w-64 text-sm px-1'
           />
           <button type='submit'>
-            <FaSearch className='text-slate-500 hover:text-slate-700' />
+            <FaSearch className='text-slate-600' />
           </button>
         </form>
 
-        {/* Navigation */}
-        <ul className='flex gap-4 items-center text-slate-600 text-sm font-medium'>
-          <Link to='/home'>
-            <li className='flex items-center gap-1 hover:text-blue-600 transition'>
-              <FaHome /> <span className='hidden sm:inline'>Home</span>
-            </li>
+        <ul className='flex gap-4 items-center'>
+          <Link
+            to='/'
+            className='flex items-center gap-1 text-slate-700 hover:underline'
+          >
+            <FaHome />
+            <span className='hidden sm:inline'>Home</span>
           </Link>
-          <Link to='/about'>
-            <li className='flex items-center gap-1 hover:text-blue-600 transition'>
-              <FaInfoCircle /> <span className='hidden sm:inline'>About</span>
-            </li>
+
+          <Link
+            to='/about'
+            className='flex items-center gap-1 text-slate-700 hover:underline'
+          >
+            <FaInfoCircle />
+            <span className='hidden sm:inline'>About</span>
           </Link>
-          <Link to='/signin'>
-            <li className='flex items-center gap-1 hover:text-blue-600 transition'>
-              <FaSignInAlt /> <span className='hidden sm:inline'>Sign In</span>
-            </li>
-          </Link>
-          <Link to='/signup'>
-            <li className='flex items-center gap-1 hover:text-blue-600 transition'>
-              <FaUserPlus /> <span className='hidden sm:inline'>Sign Up</span>
-            </li>
-          </Link>
+
+          {currentUser ? (
+            <Link
+              to='/profile'
+              className='flex items-center gap-1 text-slate-700 hover:underline'
+            >
+              <FaUserCircle />
+              <span className='hidden sm:inline'>Profile</span>
+            </Link>
+          ) : (
+            <>
+              <Link
+                to='/signin'
+                className='flex items-center gap-1 text-slate-700 hover:underline'
+                title='Sign In'
+              >
+                <FaSignInAlt />
+                <span className='hidden sm:inline'>Sign In</span>
+              </Link>
+
+              <Link
+                to='/signup'
+                className='flex items-center gap-1 text-slate-700 hover:underline'
+                title='Sign Up'
+              >
+                <FaUserPlus />
+                <span className='hidden sm:inline'>Sign Up</span>
+              </Link>
+            </>
+          )}
         </ul>
       </div>
     </header>
