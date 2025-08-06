@@ -299,19 +299,24 @@ export default function Search() {
             </div>
           )}
 
-          {!loading &&
-            listings.map((listing) => (
-              <div key={listing._id} className='relative'>
-                <ListingItem listing={listing} />
-                <button
-                  className='absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded'
-                  onClick={() => navigate(`/listing/${listing._id}`)}
-                >
-                  View & Book
-                </button>
-              </div>
-            ))}
+        {!loading &&
+  listings.map((listing) => (
+    <div key={listing._id} className='relative'>
+      <ListingItem listing={listing} />
+      <button
+        className='absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded'
+        onClick={() => navigate(`/listing/${listing._id}`, { state: { listing } })}
+      >
+        View & Book
+      </button>
+    </div>
+  ))}
+
+          
+
+
         </div>
+
 
         {showMore && (
           <div className='text-center'>

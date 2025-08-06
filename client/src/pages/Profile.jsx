@@ -9,11 +9,12 @@ import {
 } from "../redux/user/userSlice";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../firebase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Add this line
 
   const fileRef = useRef();
   const [file, setFile] = useState(undefined);
@@ -23,7 +24,6 @@ export default function Profile() {
 
   const handleFileUpload = () => {
     if (!file) return;
-
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -32,12 +32,13 @@ export default function Profile() {
       "state_changed",
       null,
       (error) => {
-        console.log(error);
+        console.error("Upload Error:", error);
         setFileUploadError(true);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setFormData({ ...formData, avatar: downloadURL });
+          setFileUploadError(false);
         });
       }
     );
@@ -69,72 +70,100 @@ export default function Profile() {
     }
   };
 
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate("/home"); // Or use navigate("/") if your home is at "/"
+  };
+
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-6">Profile</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-          ref={fileRef}
-          accept="image/*"
-        />
-        <button
-          type="button"
-          onClick={handleFileUpload}
-          className="bg-blue-500 text-white p-2 rounded"
-        >
-          Upload Image
-        </button>
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-xl rounded-xl mt-10">
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">My Profile</h1>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <div className="flex items-center gap-4">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files[0])}
+            ref={fileRef}
+            className="w-full text-sm text-gray-600"
+          />
+          <button
+            type="button"
+            onClick={handleFileUpload}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            Upload
+          </button>
+        </div>
 
         {fileUploadError && (
-          <p className="text-red-500 text-sm">Image upload failed!</p>
+          <p className="text-sm text-red-600">❌ Failed to upload image.</p>
         )}
 
         <input
           type="text"
+          id="username"
           placeholder="Username"
           defaultValue={currentUser?.username}
-          id="username"
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="p-3 border rounded w-full"
         />
         <input
           type="email"
+          id="email"
           placeholder="Email"
           defaultValue={currentUser?.email}
-          id="email"
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="p-3 border rounded w-full"
         />
         <input
           type="password"
-          placeholder="Password"
           id="password"
+          placeholder="New Password"
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="p-3 border rounded w-full"
         />
+
         <button
+          type="submit"
           disabled={loading}
-          className="bg-green-600 text-white p-2 rounded hover:bg-green-700"
+          className={`w-full py-3 rounded font-semibold text-white ${
+            loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+          } transition`}
         >
           {loading ? "Updating..." : "Update Profile"}
         </button>
+
         {updateSuccess && (
-          <p className="text-green-600 text-sm">Profile updated successfully!</p>
+          <p className="text-green-600 text-sm mt-2 text-center">
+            ✅ Profile updated successfully!
+          </p>
         )}
       </form>
 
-      <div className="flex justify-between mt-4 text-sm">
-        <Link to="/create-listing" className="text-blue-600 hover:underline">
-          Create Listing
+      <div className="flex flex-wrap justify-center mt-6 gap-4 text-sm">
+        <Link to="/create-listing" className="text-blue-700 hover:underline">
+          🏡 Create Listing
         </Link>
-        <span
-          className="text-red-500 cursor-pointer"
-          onClick={() => dispatch(signOut())}
+        <Link to="/search" className="text-blue-700 hover:underline">
+          🔍 Search Listings
+        </Link>
+        <Link to="/about" className="text-blue-700 hover:underline">
+          📖 About Us
+        </Link>
+        <Link to="/home" className="text-blue-700 hover:underline">
+          🏠 Home
+        </Link>
+      </div>
+
+      <div className="mt-6 text-center">
+        <button
+          onClick={handleSignOut}
+          className="text-red-600 hover:underline font-semibold"
         >
-          Sign Out
-        </span>
+          🚪 Sign Out
+        </button>
       </div>
     </div>
   );

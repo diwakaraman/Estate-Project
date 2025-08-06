@@ -4,6 +4,7 @@ import Footer from './components/footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Profile from './pages/Profile';
+import CreateListing from './pages/CreateListing';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Search from './pages/Search';
@@ -27,6 +28,18 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<Search />} />
         <Route path="/listing/:listingId" element={<ListingItem />} />
+        <Route path="/create-listing" element={<CreateListing />} />
+
+        <Route path="/description/:listingId" element={<Description />} />
+
+        <Route path="/update-listing/:listingId" element={<CreateListing />} />
+
+       <Route path="/listing/:id" element={<Description />} />
+        
+
+      <Route path="/listing/:id" element={<Description />} />
+
+
         <Route path="*" element={<h1 className="text-center text-2xl text-red-500 mt-10">404 - Page Not Found</h1>} />
       </Routes>
       <Footer /> 
