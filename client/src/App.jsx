@@ -15,6 +15,10 @@ import { updateListing } from '../../api/controllers/listing.controller';
 
 import React from 'react';    
 import Services from './pages/Services'; // Importing the Services component
+import ServicesBook from './pages/ServicesBook';
+
+
+
 
 function App() {
   return (
@@ -39,7 +43,8 @@ function App() {
         <Route path="/Description/:id" element={<Description />} />
 
        <Route path="/services" element={<Services />} /> {/* Adding the Services route */}
-      
+
+      <Route path="/servicesbook" element={<ServicesBook />} />
       
 
         <Route path="*" element={<h1 className="text-center text-2xl text-red-500 mt-10">404 - Page Not Found</h1>} />

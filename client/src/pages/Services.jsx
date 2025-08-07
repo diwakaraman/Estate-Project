@@ -1,5 +1,3 @@
-// src/pages/Services.jsx
-
 import React from 'react';
 import {
   FaTags,
@@ -7,6 +5,7 @@ import {
   FaMoneyBillWave,
   FaShieldAlt,
 } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import servicesData from '../Data/servicesData';
 
 const iconMap = {
@@ -28,16 +27,18 @@ export default function Services() {
           {servicesData.map((service) => {
             const Icon = iconMap[service.icon];
             return (
-              <div
+              <Link
                 key={service.id}
-                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                to="/servicesbook"
+                state={{ service }}
+                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 block"
               >
                 <Icon size={40} className={`${service.color} mb-4`} />
                 <h3 className="text-xl font-semibold text-slate-800 mb-2">
                   {service.title}
                 </h3>
                 <p className="text-gray-600 text-sm">{service.description}</p>
-              </div>
+              </Link>
             );
           })}
         </div>
