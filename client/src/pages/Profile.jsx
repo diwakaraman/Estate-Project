@@ -124,7 +124,10 @@ export default function Profile() {
             <div className="absolute top-12 right-0 bg-white border shadow-lg rounded-lg w-64 z-50">
               <ul className="divide-y text-sm">
                 <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/profile")}>My Account</li>
-                <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/chats")}>Chats</li>
+                <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/chats")
+                  
+                }>Chats</li>
+
                 <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/alerts")}>Alerts</li>
                 <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/my-ads")}>My Ads</li>
                 <li className="p-3 hover:bg-gray-100 cursor-pointer" onClick={() => handleDropdownNavigation("/cart")}>My Cart</li>
