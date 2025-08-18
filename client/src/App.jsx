@@ -13,11 +13,19 @@ import Description from './pages/Description';
 import { updateListing } from '../../api/controllers/listing.controller';
 
 
+
 import React from 'react';    
 import Services from './pages/Services'; // Importing the Services component
 import ServicesBook from './pages/ServicesBook';
-
-
+import Chats from './pages/Chats'; // Importing the Chats component
+import Alerts from './pages/Alerts'; // Importing the Alerts component
+import Ads from './pages/Ads';
+import Cart from './pages/Cart';
+import DoorstepOffers from './pages/DoorstepOffers';
+import Leads from './pages/Leads';
+import InstantLeads from './pages/InstantLeads';
+import Order from './pages/Order';
+import Recommended from './pages/Recommended';
 
 
 function App() {
@@ -48,6 +56,19 @@ function App() {
       
 
         <Route path="*" element={<h1 className="text-center text-2xl text-red-500 mt-10">404 - Page Not Found</h1>} />
+
+        <Route path="/chats" element={<Chats />} /> {/* Adding the Chats route */}
+        <Route path="/alerts" element={<Alerts />} /> {/* Adding the Alerts route */}
+        
+        <Route path="/my-ads" element={<Ads />} /> {/* Reusing Ads component for My Ads */}
+        <Route path="/cart" element={<Cart />} /> {/* Adding the Cart route */}
+        <Route path="/doorstep-offers" element={<DoorstepOffers />} /> {/* Adding the Doorstep Offers route */}
+        <Route path="/leads" element={<Leads />} /> {/* Adding the Leads route */}
+        <Route path="/instant-leads" element={<InstantLeads />} /> {/* Adding the Instant Leads route */}
+        <Route path="/orders" element={<Order />} /> {/* Adding the Order route */}
+        <Route path="/recommended" element={<Recommended />} /> {/* Adding the Recommended route */}
+
+
       </Routes>
       <Footer /> 
     </BrowserRouter>
