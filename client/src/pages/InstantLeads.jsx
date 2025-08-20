@@ -1,4 +1,4 @@
-// src/pages/InstantLeads.jsx
+
 import React, { useState } from "react";
 import { FaUser, FaPhoneAlt, FaEnvelope, FaBolt } from "react-icons/fa";
 

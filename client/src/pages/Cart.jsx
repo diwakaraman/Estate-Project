@@ -1,4 +1,4 @@
-// src/pages/Cart.jsx
+
 import React, { useState } from "react";
 import { FaTrash, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
 

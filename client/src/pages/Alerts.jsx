@@ -1,4 +1,4 @@
-// src/pages/Alerts.jsx
+
 import React, { useState } from "react";
 import { FaBell, FaHome, FaTag, FaInfoCircle } from "react-icons/fa";
 

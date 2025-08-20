@@ -92,6 +92,10 @@ export default function Profile() {
         <Link to="/create-listing" className="block text-blue-700 hover:underline">
           🏡 Create Listing
         </Link>
+       <Link to="update-listing" className="block text-blue-700 hover:underline">
+          📝 Update Listing   
+        </Link>
+
         <Link to="/search" className="block text-blue-700 hover:underline ">
           🔍 Search Listings
         </Link>

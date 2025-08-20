@@ -1,4 +1,4 @@
-// src/pages/Ads.jsx
+
 import React, { useState } from "react";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 

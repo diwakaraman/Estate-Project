@@ -1,4 +1,4 @@
-// src/pages/Recommended.jsx
+
 import React, { useState } from "react";
 import { FaHome, FaMapMarkerAlt, FaRupeeSign, FaStar } from "react-icons/fa";
 

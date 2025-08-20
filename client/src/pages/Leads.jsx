@@ -1,4 +1,4 @@
-// src/pages/Leads.jsx
+
 import React from "react";
 import { FaUser, FaPhoneAlt, FaEnvelope, FaHome } from "react-icons/fa";
 
