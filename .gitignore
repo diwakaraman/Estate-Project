@@ -23,5 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment files (IMPORTANT)
 .env
 /api/.env
+/client/.env
